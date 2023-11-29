@@ -5,9 +5,14 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
-public class DetailEnrollmentPK implements Serializable {
+public class EnrollmentDetailPK implements Serializable {
 
-    @ManyToOne
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7471473349521713954L;
+
+	@ManyToOne
     @JoinColumn(name = "id_enrollment", nullable = false, foreignKey = @ForeignKey(name = "ENROLLMENT_FK"))
     private Enrollment enrollment;
 

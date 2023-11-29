@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,10 +24,13 @@ public class Enrollment {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_student", nullable = false, foreignKey = @ForeignKey(name = "STUDENT_FK"))
     private Student student;
 
     @Column(nullable = false)
     private boolean state;
+    
+    @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL)
+    private List<EnrollmentDetail> details;
 }

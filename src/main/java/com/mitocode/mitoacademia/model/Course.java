@@ -18,7 +18,7 @@ public class Course {
     @EqualsAndHashCode.Include
     private Integer idCourse;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(length = 15, nullable = false)

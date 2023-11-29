@@ -1,5 +1,7 @@
 package com.mitocode.mitoacademia.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +26,9 @@ public class Student {
     @Column(length = 50, nullable = false)
     private String lastName;
 
-    @Column(length = 18, nullable = false)
+    @Column(length = 18, nullable = false, unique = true)
     private String DNI;
 
     @Column(nullable = false)
-    private Integer age;
+    private LocalDate birthDate;
 }
