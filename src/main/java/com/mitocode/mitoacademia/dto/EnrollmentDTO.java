@@ -2,7 +2,7 @@ package com.mitocode.mitoacademia.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.mitocode.mitoacademia.model.Student;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,10 @@ public class EnrollmentDTO {
     private LocalDateTime date;
 
     @NotNull
-    private Student student;
+    private StudentDTO student;
+    
+    @NotNull
+    private SchoolPeriodDTO period;
 
     @NotNull
     private boolean state;

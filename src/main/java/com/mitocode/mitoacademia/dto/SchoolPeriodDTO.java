@@ -1,6 +1,8 @@
 package com.mitocode.mitoacademia.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDate;
+
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -14,17 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DetailEnrollmentDTO {
+public class SchoolPeriodDTO {
+	
+	private Integer IdSchoolPeriod;
+	
+	@NotNull
+	@NotEmpty
+	@Size(min = 3, max = 30)
+	private String nameSchoolPeriod;
+	
+	@NotNull
+	private LocalDate startDate;
+	
+	@NotNull
+	private LocalDate endDate;
 
-    @JsonBackReference
-    private EnrollmentDTO enrollment;
-    
-    @NotNull
-    @NotEmpty
-    private CourseDTO course;
-
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 30)
-    private String classroom;
 }

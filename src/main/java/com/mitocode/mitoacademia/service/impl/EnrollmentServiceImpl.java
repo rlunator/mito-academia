@@ -34,24 +34,33 @@ public class EnrollmentServiceImpl extends CRUDServiceImpl<Enrollment,Integer> i
 
 	@Override
 	public List<EnrollmentCuorseDTO> getResumeEnrollment() throws Exception {
+		List<EnrollmentCuorseDTO> listEnroll = new ArrayList<>();
 		Stream<Enrollment> enrollStream = repo.findAll().stream();
 		Stream<List<EnrollmentDetail>> lsDStream = enrollStream.map(Enrollment::getDetails);
 		Stream<EnrollmentDetail> streamDetail = lsDStream.flatMap(Collection::stream);
-		Map<Object,Map<Object,List<EnrollmentDetail>>> mapRes = streamDetail.collect(groupingBy(e-> e.getCourse().getName() ,
-															 groupingBy(e -> e.getEnrollment().getStudent().getName())));
+		Map<Object,Map<Object,List<EnrollmentDetail>>> mapRes = streamDetail
+																	.collect(groupingBy(e-> e.getCourse().getName() ,
+																			groupingBy(e -> e.getEnrollment().getStudent().getName())));
 		
-		List<EnrollmentCuorseDTO> listEnroll= mapRes.entrySet()
-												 	.stream()
-												 	.map(e ->{
-															EnrollmentCuorseDTO resul = new EnrollmentCuorseDTO();
-															List<String> studentLis = new ArrayList<>();
-															resul.setNameOfCourse(e.getKey().toString());
-															e.getValue().entrySet().forEach(it ->{
-																studentLis.add(it.getKey().toString());
-															});
-															resul.setStudents(studentLis);
-															return resul;
-													}).toList();
+		listEnroll= mapRes.entrySet()
+						 	.stream()
+						 	.flatMap(e ->{
+						 		EnrollmentCuorseDTO resul = new EnrollmentCuorseDTO();
+								List<String> studentLis = new ArrayList<>();
+								resul.setNameOfCourse(e.getKey().toString());
+								e.getValue().entrySet().forEach(it ->{
+									List<EnrollmentDetail> lis =it.getValue();
+									lis.forEach(item -> {
+										StringBuilder sb = new StringBuilder();
+										sb.append(item.getEnrollment().getStudent().getName())
+										  .append(" ")
+										  .append(item.getEnrollment().getStudent().getLastName());
+										studentLis.add(sb.toString());
+									});
+								});
+								resul.setStudents(studentLis.stream().distinct().toList());
+								return Stream.of(resul);
+						 	}).toList();
 		return listEnroll;
 	}
 }

@@ -5,6 +5,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,7 +61,27 @@ public class GlobalHandlerException extends ResponseEntityExceptionHandler {
    @Override
    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
 	   CustomeErrorResponse errorResponse = new CustomeErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
-
-	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	   return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+   }
+   
+   @Override
+   protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatusCode status, WebRequest req) {
+	   	CustomeErrorResponse errorResponse = new CustomeErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
+	   	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+   
+   @Override
+   protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex,
+			HttpHeaders headers, HttpStatusCode status, WebRequest req) {
+	 	CustomeErrorResponse errorResponse = new CustomeErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+   
+   @Override
+protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
+		HttpHeaders headers, HttpStatusCode status, WebRequest req) {
+	 	CustomeErrorResponse errorResponse = new CustomeErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
+	return new ResponseEntity<>(errorResponse, HttpStatus.NOT_ACCEPTABLE);
 }
 }

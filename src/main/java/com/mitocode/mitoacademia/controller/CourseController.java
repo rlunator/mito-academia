@@ -3,6 +3,7 @@ package com.mitocode.mitoacademia.controller;
 import com.mitocode.mitoacademia.dto.CourseDTO;
 import com.mitocode.mitoacademia.model.Course;
 import com.mitocode.mitoacademia.service.ICourseService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,14 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseController {
 
-    private final ICourseService iCourseService;
+    private final ICourseService service;
     
     @Qualifier("courseMapper")
     private final ModelMapper mapper;
     
     @GetMapping
     public ResponseEntity<List<CourseDTO>> getAll() throws Exception {
-        List<CourseDTO> listCourse = iCourseService.readAll().stream()
+        List<CourseDTO> listCourse = service.readAll().stream()
                                         .map(this::convertToDto)
                                         .toList() ;
         return new ResponseEntity<>(listCourse, HttpStatus.OK);
@@ -40,26 +41,26 @@ public class CourseController {
     
     @GetMapping("/{id}")
     public ResponseEntity<CourseDTO> readById(@PathVariable("id") Integer id) throws Exception {
-        Course Course = iCourseService.readById(id);
+        Course Course = service.readById(id);
         return new ResponseEntity<>(convertToDto(Course), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<CourseDTO> create(@RequestBody @Valid CourseDTO Course) throws Exception{
-        Course CourseR = iCourseService.save(convertToEntity(Course));
+        Course CourseR = service.save(convertToEntity(Course));
         return new ResponseEntity<>(convertToDto(CourseR), HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<CourseDTO> update(@RequestBody @Valid CourseDTO CourseDTO, @PathVariable("id") Integer id)
     		throws Exception {
-        Course Course = iCourseService.update(convertToEntity(CourseDTO), id);        
+        Course Course = service.update(convertToEntity(CourseDTO), id);        
         return new ResponseEntity<>(convertToDto(Course), HttpStatus.OK);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id)throws Exception {
-        iCourseService.delete(id);        
+        service.delete(id);        
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     

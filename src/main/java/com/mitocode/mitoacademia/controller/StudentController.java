@@ -27,14 +27,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final IStudentService iStudentService;
+    private final IStudentService service;
     
     @Qualifier("modelMapper")
     private final ModelMapper mapper;
     
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getAll() throws Exception {
-        List<StudentDTO> listStudent = iStudentService.readAll().stream()
+        List<StudentDTO> listStudent = service.readAll().stream()
                                         .map(this::convertToDto)
                                         .toList() ;
         return new ResponseEntity<>(listStudent, HttpStatus.OK);
@@ -42,37 +42,39 @@ public class StudentController {
     
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> readById(@PathVariable("id") Integer id) throws Exception {
-        Student Student = iStudentService.readById(id);
+        Student Student = service.readById(id);
         return new ResponseEntity<>(convertToDto(Student), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<StudentDTO> create(@RequestBody @Valid StudentDTO student) throws Exception{
-        Student StudentR = iStudentService.save(convertToEntity(student));
+        Student StudentR = service.save(convertToEntity(student));
         return new ResponseEntity<>(convertToDto(StudentR), HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<StudentDTO> update(@RequestBody @Valid StudentDTO studentDTO, @PathVariable("id") Integer id)
     		throws Exception {
-        Student Student = iStudentService.update(convertToEntity(studentDTO), id);        
+        Student Student = service.update(convertToEntity(studentDTO), id);        
         return new ResponseEntity<>(convertToDto(Student), HttpStatus.OK);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id)throws Exception {
-        iStudentService.delete(id);        
+        service.delete(id);        
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @GetMapping("/orderAge")
     public ResponseEntity<List<StudentDTO>> getAllOrderAge() throws Exception {
-        List<StudentDTO> listStudent = iStudentService.getStudentOrderAge();
+        List<StudentDTO> listStudent = service.getStudentOrderAge();
         return new ResponseEntity<>(listStudent, HttpStatus.OK);
     }
     
     private StudentDTO convertToDto(Student obj){
-        return mapper.map(obj, StudentDTO.class);
+    	StudentDTO student = mapper.map(obj, StudentDTO.class);
+    	student.calculateAge(student.getBirthDate());
+        return student;
     }
 
     private Student convertToEntity(StudentDTO dto){

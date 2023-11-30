@@ -6,6 +6,7 @@ import java.time.Period;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,17 @@ public class StudentDTO {
 
     @NotNull
     @NotEmpty
+    @Size(min = 3, max = 30)
     private String nameStudent;
 
     @NotNull
     @NotEmpty
+    @Size(min = 3, max = 50)
     private String lastName;
 
     @NotNull
     @NotEmpty
+    @Size(min = 3, max = 18)
     private String DNI;
     
     @NotNull

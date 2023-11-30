@@ -27,14 +27,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EnrollmentController {
 
-    private final IEnrollmentService iEnrollmentService;
+    private final IEnrollmentService service;
     
     @Qualifier("modelMapper")
     private final ModelMapper mapper;
     
     @GetMapping
     public ResponseEntity<List<EnrollmentDTO>> getAll() throws Exception {
-        List<EnrollmentDTO> listEnrollment = iEnrollmentService.readAll().stream()
+        List<EnrollmentDTO> listEnrollment = service.readAll().stream()
                                         .map(this::convertToDto)
                                         .toList() ;
         return new ResponseEntity<>(listEnrollment, HttpStatus.OK);
@@ -42,32 +42,32 @@ public class EnrollmentController {
     
     @GetMapping("/{id}")
     public ResponseEntity<EnrollmentDTO> readById(@PathVariable("id") Integer id) throws Exception {
-        Enrollment Enrollment = iEnrollmentService.readById(id);
+        Enrollment Enrollment = service.readById(id);
         return new ResponseEntity<>(convertToDto(Enrollment), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<EnrollmentDTO> create(@RequestBody @Valid EnrollmentDTO enrollment) throws Exception{
-        Enrollment EnrollmentR = iEnrollmentService.save(convertToEntity(enrollment));
+        Enrollment EnrollmentR = service.save(convertToEntity(enrollment));
         return new ResponseEntity<>(convertToDto(EnrollmentR), HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<EnrollmentDTO> update(@RequestBody @Valid EnrollmentDTO enrollment, @PathVariable("id") Integer id)
     		throws Exception {
-        Enrollment Enrollment = iEnrollmentService.update(convertToEntity(enrollment), id);        
+        Enrollment Enrollment = service.update(convertToEntity(enrollment), id);        
         return new ResponseEntity<>(convertToDto(Enrollment), HttpStatus.OK);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id)throws Exception {
-        iEnrollmentService.delete(id);        
+        service.delete(id);        
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @GetMapping("/resume")
     public ResponseEntity<List<EnrollmentCuorseDTO>> getResumeEnrollment() throws Exception {
-    	List<EnrollmentCuorseDTO> listEnrollment = iEnrollmentService .getResumeEnrollment();
+    	List<EnrollmentCuorseDTO> listEnrollment = service .getResumeEnrollment();
         return new ResponseEntity<>(listEnrollment, HttpStatus.OK);
     }
     

@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id_student", "id_school_period"})})
 public class Enrollment {
 
     @Id
@@ -27,6 +28,10 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "id_student", nullable = false, foreignKey = @ForeignKey(name = "STUDENT_FK"))
     private Student student;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_school_period", nullable = false, foreignKey = @ForeignKey(name = "SCHOLLPERIOD_FK"))
+    private SchoolPeriod period;
 
     @Column(nullable = false)
     private boolean state;
