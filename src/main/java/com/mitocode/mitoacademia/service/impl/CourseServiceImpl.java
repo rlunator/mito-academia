@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class CourseServiceImpl extends CRUDServiceImpl<Course,Integer> implements ICourseService{
 
     private final ICourseRepo repo;
+    
     @Override
     protected IGeneRepo<Course, Integer> getRepo() {
         return repo;
